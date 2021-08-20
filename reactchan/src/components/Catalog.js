@@ -8,17 +8,20 @@ const Catalog = (props) => {
     const [threads, setThreads] = useState([]);
     const [showThreadForm, setShowThreadForm] = useState(false);
     useEffect(() => {
-        Axios.get('http://localhost:3001/api/fetchThreads')
+        Axios.get(`http://localhost:3001/api/${props.board}/fetchThreads`)
         .then(result => {
             setThreads(result.data);
         })
-    }, [])
+    }, [props.board])
     return (
         <>
         <Header/>
+        <h1 style = {{textAlign: 'center'}}>
+            {props.board}
+        </h1>
         <div>
             <div>   
-                
+                    
                     <a href = '#'><h1 
 
                         style = {{textAlign: 'center'}}
@@ -27,13 +30,14 @@ const Catalog = (props) => {
                     [Make a New Thread]
                     </h1></a>
                     
-                    {showThreadForm ? <ThreadInput/> : ""}
+                    {showThreadForm ? <ThreadInput board = {props.board}/> : ""}
             </div>
             {threads.map((thread) => (
-                <span>
+                <span key = {thread.postID}>
                         <ThreadCover
                             postID = {thread.postID}
                             title = {thread.title}
+                            board = {props.board}
                         /> 
                 </span>
             ))}

@@ -2,7 +2,7 @@ import Axios from 'axios';
 import {useState} from 'react';
 import {useHistory} from 'react-router-dom'
 
-const ThreadInput = () => {
+const ThreadInput = (props) => {
     const history = useHistory()
     const [title, setTitle] = useState("");
     const [name, setName] = useState("");
@@ -13,7 +13,7 @@ const ThreadInput = () => {
     const [showFailedTextContentInput, setShowFailedTextContentInput] = useState(false);
     const submitThread = () => {
         const checkIfValidImageRegex = new RegExp('(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\\.(?:jpg|gif|png))(?:\\?([^#]*))?(?:#(.*))?');
-        const isValidImage = checkIfValidImageRegex.test(imgURL);
+        const isValidImage = checkIfValidImageRegex.test(imgURL) && imgURL.length < 512;
         const isTextContentNonNull = textContent.length > 0;
         const isValidInput = isValidImage && isTextContentNonNull;
         if(!isValidInput){
@@ -22,7 +22,7 @@ const ThreadInput = () => {
             if(!isValidImage) setShowFailedImgURLInput(true);
             else setShowFailedImgURLInput(false);
         }else{
-            Axios.post('http://localhost:3001/api/makeThread', 
+            Axios.post(`http://localhost:3001/api/${props.board}/makeThread`, 
             {
                 title: title.substring(0, 44),
                 name: name.substring(0, 44),
@@ -31,7 +31,7 @@ const ThreadInput = () => {
             })
             .then(result => {
                 if(result.data.successfulPost){
-                    history.push(`/${result.data.postID}`)
+                    history.push(`/${props.board}/${result.data.postID}`)
                 }else{
                     setFailedThreadMessage(result.data.message);
                 }

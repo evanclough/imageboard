@@ -6,6 +6,7 @@ import Header from './Header';
 import Post from './Post';
 
 const Thread = (props) => {
+    console.log(props);
     const [initialPost, setInitialPost] = useState([]);
     const [posts, setPosts] = useState([]);
     const [showPostForm, setShowPostForm] = useState(false);
@@ -15,38 +16,37 @@ const Thread = (props) => {
     const [totalReplies, setTotalReplies] = useState(0)
     const [imageReplies, setImageReplies] = useState(0)
     useEffect(() => {
-        Axios.post('http://localhost:3001/api/fetchPost', 
+        Axios.post(`http://localhost:3001/api/${props.board}/fetchPost`, 
         {ID: props.ID})
         .then(result => {
             setInitialPost(result.data)
         })
-        Axios.post('http://localhost:3001/api/fetchPostsForThread',
+        Axios.post(`http://localhost:3001/api/${props.board}/fetchPostsForThread`,
         {parentThread: props.ID})
         .then(result => {
             setPosts(result.data);
         })
-        Axios.post('http://localhost:3001/api/checkIfThreadFull', 
+        Axios.post(`http://localhost:3001/api/${props.board}/checkIfThreadFull`, 
         {parentThread: props.ID})
         .then(result => {
             setIsThreadFull(result.data.threadFull);
         })
-        Axios.post('http://localhost:3001/api/postersInThread',
+        Axios.post(`http://localhost:3001/api/${props.board}/postersInThread`,
         {parentThread: props.ID})
         .then(result => {
             setPostersInThread(result.data.postersInThread);
         })
-        Axios.post('http://localhost:3001/api/fetchTotalReplies',
+        Axios.post(`http://localhost:3001/api/${props.board}/fetchTotalReplies`,
         {ID: props.ID})
         .then(result => {
-            console.log(result.data)
             setTotalReplies(result.data.totalReplies);
         })
-        Axios.post('http://localhost:3001/api/fetchImageReplies', 
+        Axios.post(`http://localhost:3001/api/${props.board}/fetchImageReplies`, 
         {ID: props.ID})
         .then(result => {
             setImageReplies(result.data.imageReplies);
         })
-    }, [props.ID]);
+    }, [props.ID, props.board]);
     return (
         <>
         <Header/>
@@ -58,7 +58,7 @@ const Thread = (props) => {
                     [Reply to this thread]
                     </h1></a>
                     <div style = {{ padding: '5px'}}><p style = {{textAlign: 'right'}}>Posters: {postersInThread} / Total Replies: {totalReplies - 1} / Image Replies: {imageReplies - 1} </p></div>
-        {showPostForm && !isThreadFull ? <PostInput parentThread = {props.ID} replyingTo = {replyingTo}/> : ""}
+        {showPostForm && !isThreadFull ? <PostInput board = {props.board}parentThread = {props.ID} replyingTo = {replyingTo}/> : ""}
         {initialPost.map((initialPost) => (
             <div
                 className = 'post'

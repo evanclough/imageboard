@@ -24,10 +24,10 @@ const PostInput = (props) => {
                 textContent: textContent.substring(0, 4095),
                 parentThread: props.parentThread
             }
-            Axios.post('http://localhost:3001/api/makePost', post)
+            Axios.post(`http://localhost:3001/api/${props.board}/makePost`, post)
             .then(result => {
                 if(result.data.successfulPost){
-                    history.push(`/${result.data.parentThread}`)
+                    history.push(`/${props.board}/${result.data.parentThread}`)
                 }else{
                     setFailedThreadMessage(result.data.message);
                 }
