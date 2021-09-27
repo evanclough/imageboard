@@ -33,15 +33,15 @@ const Catalog = (props) => {
                     {showThreadForm ? <ThreadInput board = {props.board}/> : ""}
             </div>
             {threads.map((thread) => (
-                <span key = {thread.postID}>
+                <span key = {props.board + thread.postID}>
                         <ThreadCover
+                            key = {props.board + thread.postID}
                             postID = {thread.postID}
                             title = {thread.title}
                             board = {props.board}
                         /> 
                 </span>
             ))}
-            
         </div>
         </>
     )

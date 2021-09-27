@@ -37,7 +37,7 @@ const Post = (props) => {
                         </a>
                         </React.Fragment>
                         :
-                        <></>
+                        <React.Fragment key = {Math.random()}></React.Fragment>
                     ))}
                     </p>
                 </div>

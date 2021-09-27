@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 
 const PostTextContent = (props) => {
@@ -9,11 +9,11 @@ const PostTextContent = (props) => {
         let resultJSX = [];
         let lastI = 0;
         while((array1 = regex.exec(props.textContent)) !== null){
-            resultJSX.push(<>{props.textContent.substring(lastI, regex.lastIndex - array1[0].length)}</>);
-            resultJSX.push(<a href = {`#${array1[0].substring(2, regex.lastIndex)}`}>{array1[0]}</a>);
+            resultJSX.push(<React.Fragment key = {lastI}>{props.textContent.substring(lastI, regex.lastIndex - array1[0].length)}</React.Fragment>);
+            resultJSX.push(<a key = {'a' + lastI.toString()}href = {`#${array1[0].substring(2, regex.lastIndex)}`}>{array1[0]}</a>);
             lastI = regex.lastIndex;
         }
-        resultJSX.push(<>{props.textContent.substring(lastI)}</>)
+        resultJSX.push(<React.Fragment key = {-1}>{props.textContent.substring(lastI)}</React.Fragment>)
         setTC(resultJSX);
     }, [props.textContent])
     

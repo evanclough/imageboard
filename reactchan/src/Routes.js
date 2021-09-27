@@ -1,92 +1,47 @@
 import Catalog from './components/Catalog';
-
-import {BrowserRouter, Route, Switch } from "react-router-dom";
-import Thread from "./components/Thread";
+import RenderThreads from './components/RenderThreads';
+import {BrowserRouter, Route} from "react-router-dom";
 import Axios from 'axios'
 import Header from './components/Header';
 import React, {useState, useEffect} from 'react'
+
 function Routes() {
-    const [aThreads, aSetThreads] = useState([]);
-    const [bThreads, bSetThreads] = useState([]);
+    const [boards, setBoards] = useState([])
     useEffect(() => {
-        
-        Axios.get(`http://localhost:3001/api/b/fetchThreads`)
+        Axios.get('http://localhost:3001/api/fetchEverything')
         .then(result => {
-            bSetThreads(result.data);
+            for(let i = 0; i < result.data.length; i++){
+                result.data[i].threads.pop()
+            }
+            setBoards(result.data)
         })
-            Axios.get(`http://localhost:3001/api/a/fetchThreads`)
-            .then(result => {
-                aSetThreads(result.data);
-            })
     }, [])
-    
     return (  
         <BrowserRouter forceRefresh = {true}>
-            <Switch>
             <Route
-                    path = '/'
-                    exact
-                    component = {Header}
-                />
-                
-                    <Route
-                        path = {`/a`}
-                        exact
-                        render = {(props) => (
-                            <Catalog
-                                {...props} 
-                                board = 'a'
-                            />
-                        )}
-                    />
-                    <Route
-                        path = {`/b`}
-                        exact
-                        render = {(props) => (
-                            <Catalog
-                                {...props} 
-                                board = 'b'
-                            />
-                        )}
-                    />
-                
-                    {aThreads.map((thread) => (
-                            <Route 
-                                key = {thread.postID}
-                                path = {`/a/${thread.postID}`} 
-                                exact 
-                                render={(props) => (
-                                    <Thread 
-                                        {...props} 
-                                        ID = {thread.postID}
-                                        title = {thread.title}
-                                        board = {'a'}
-                                    />
-                                )}
-                            />
-                        ))}
-                        {bThreads.map((thread) => (
-                            <Route 
-                                key = {thread.postID}
-                                path = {`/b/${thread.postID}`} 
-                                exact 
-                                render={(props) => (
-                                    <Thread 
-                                        {...props} 
-                                        ID = {thread.postID}
-                                        title = {thread.title}
-                                        board = {'b'}
-                                    />
-                                )}
-                            />
-                        ))}
-                
-                <Route 
-                    path = '/'
-                    render = {() => <div>404 :/</div>}
-                />
-                
-            </Switch>
+                path = '/'
+                exact
+                component = {Header}
+            />
+                    {boards.map((board) => (
+                        <Route
+                            key = {board.boardName}
+                            path = {`/${board.boardName}`}
+                            exact
+                            render = {(props) => (
+                                <Catalog
+                                    {...props} 
+                                    board = {board.boardName}
+                                />
+                            )}
+                        />
+                    ))}
+                    {boards.map((board) => (
+                        <RenderThreads
+                            key = {board.boardName}
+                            board = {board}
+                        />
+                    ))}
         </BrowserRouter>
     );
 }

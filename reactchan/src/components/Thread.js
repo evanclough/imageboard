@@ -1,12 +1,11 @@
 import Axios from 'axios'
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import PostInput from './PostInput';
 import ExpandableImage from './ExpandableImage';
 import Header from './Header';
 import Post from './Post';
 
 const Thread = (props) => {
-    console.log(props);
     const [initialPost, setInitialPost] = useState([]);
     const [posts, setPosts] = useState([]);
     const [showPostForm, setShowPostForm] = useState(false);
@@ -57,10 +56,11 @@ const Thread = (props) => {
                     > 
                     [Reply to this thread]
                     </h1></a>
-                    <div style = {{ padding: '5px'}}><p style = {{textAlign: 'right'}}>Posters: {postersInThread} / Total Replies: {totalReplies - 1} / Image Replies: {imageReplies - 1} </p></div>
+                    <div style = {{ padding: '5px'}}><p style = {{textAlign: 'right'}}>Posters: {postersInThread} / Total Replies: {totalReplies} / Image Replies: {imageReplies} </p></div>
         {showPostForm && !isThreadFull ? <PostInput board = {props.board}parentThread = {props.ID} replyingTo = {replyingTo}/> : ""}
         {initialPost.map((initialPost) => (
             <div
+                key = {initialPost.ID}
                 className = 'post'
                 style = {{display: 'inline'}}
             >
@@ -82,10 +82,11 @@ const Thread = (props) => {
                         && searchForReply.textContent.includes(`>>${initialPost.ID}`)
                         ? <a 
                         style = {{fontSize: '12px'}}
+                        key = {Math.random()}
                         href = {`#${searchForReply.ID}`}> 
                            {`>>${searchForReply.ID}`}
                         </a>
-                        :<></>
+                        :<React.Fragment key = {Math.random()}></React.Fragment>
                     ))}
                 </p>
                 <ExpandableImage imgURL = {initialPost.imgURL}/>
@@ -97,6 +98,7 @@ const Thread = (props) => {
         
         {posts.map((post) => (
             <div style = {{paddingTop: '5px', maxWidth:"40%"}}
+            key = {post.ID}
                 onDoubleClick = {() => { setReplyingTo(post.ID);setShowPostForm(true);}}
             >
             <Post

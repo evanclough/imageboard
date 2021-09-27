@@ -26,7 +26,7 @@ const ThreadCover = (props) => {
     return (
         <>
             {initialPost.map((initialPost) => (
-                <span style = {{ display: 'inline-block', padding: '10px', width: '150px', textAlign: 'center'}}>
+                <span key = {initialPost.ID}style = {{ display: 'inline-block', padding: '10px', width: '150px', textAlign: 'center'}}>
                     <Link 
                         
                         key = {props.postID}
@@ -35,7 +35,7 @@ const ThreadCover = (props) => {
                     <img src = {initialPost.imgURL} alt = "" style = {{maxWidth: '150px', maxHeight: '150px'}}></img>
                     </Link>
                     <p><b> {props.title}{props.title !== "" ? ": " : ""}</b> {initialPost.textContent.substring(0, 100)}</p>
-                    <p style = {{fontSize: '12px'}}>R: <b>{totalReplies - 1}</b> / I: <b>{imageReplies - 1}</b></p>
+                    <p style = {{fontSize: '12px'}}>R: <b>{totalReplies}</b> / I: <b>{imageReplies}</b></p>
                     
                 </span>
             ))}
