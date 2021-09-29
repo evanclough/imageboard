@@ -17,7 +17,7 @@ const Header = () => {
             style = {{margin: 'auto', width: '30%', border: '3px solid green', padding: '10px'}}
         >
             
-            <div style = {{textAlign: 'center', padding: '10px'}}>boards: {boards.map((board) => (<a href = {`/${board.boardName}`} key = {board.boardName}>{board.boardName} / </a>))}</div><h1 style = {{textAlign: 'center'}}><i>REACTCHAN (SCUFFED)</i></h1>
+            <div style = {{textAlign: 'center', padding: '10px'}}>boards: {boards.map((board, index) => (<React.Fragment key = {board.boardName}><a href = {`/${board.boardName}`} >{board.boardName}  </a> {index != boards.length - 1 ? '/ ' : ''}</React.Fragment>))}</div><h1 style = {{textAlign: 'center'}}><i>Image Board</i></h1>
         </div>
     )
 }

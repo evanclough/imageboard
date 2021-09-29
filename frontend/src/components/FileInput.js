@@ -15,12 +15,13 @@ const FileInput = () => {
         let file = {filename, filepath}
         const formData = new FormData();
         formData.append('file', file)
-        Axios.post('localhost:3001/api/uploadImage'. formData, 
+        Axios.post('localhost:3001/api/uploadImage', formData, 
         {
             headers:{
                 'Content-Type':'multipart/form-data'
             }
-        }).then((result) => {
+        })
+        .then((result) => {
             file = result.data
         })
     }

@@ -4,6 +4,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const mv = require("mv")
 app.use(cors());
+app.use('/images', express.static(__dirname + '/images'));
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -189,6 +190,8 @@ async function api(){
 
 api()
 
+
 app.listen(3001, () => {
     console.log('running on port 3001!');
 });
+
